@@ -1,0 +1,4 @@
+/org.eclipse*/bin
+/org.eclipse*/target
+*.rej
+!/org.eclipse.mylyn.releng/bin

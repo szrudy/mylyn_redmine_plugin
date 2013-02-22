@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.eclipse.mylyn</groupId>
+    <artifactId>org.eclipse.mylyn-parent</artifactId>
+    <version>3.8.3-SNAPSHOT</version>
+    <relativePath>../org.eclipse.mylyn-parent</relativePath>
+  </parent>
+  <artifactId>org.eclipse.mylyn-site</artifactId>
+  <version>3.8.3-SNAPSHOT</version>
+  <packaging>eclipse-update-site</packaging>
+  <name>Mylyn for Eclipse 3.7, 3.8 and 4.2</name>
+  <properties>
+    <qualifier>${project.unqualifiedVersion}</qualifier>
+    <sign-dir>tools/mylyn/hudson/signing/mylyn</sign-dir>
+    <mirrors-url>http://www.eclipse.org/downloads/download.php?file=/mylyn/drops/${unqualifiedVersion}/${buildQualifier}/site.xml&amp;amp;protocol=http&amp;amp;format=xml</mirrors-url>
+    <!-- needs to use a 3.8 based target due to compatibility feature -->
+    <target-platform>mylyn-e3.8</target-platform>
+  </properties>
+  <profiles>
+    <profile>
+      <id>hudson.eclipse.org</id> 
+      <activation>
+        <property>
+          <name>user.name</name>
+          <value>hudsonbuild</value>
+        </property>
+      </activation>
+      <properties>
+        <dist.archive>/home/data/httpd/download.eclipse.org/mylyn/drops</dist.archive>
+      </properties>
+    </profile>
+  </profiles>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/site</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>.</directory>
+                  <includes>
+                    <include>index.html</include>
+                    <include>web/*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>pack-and-sign</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <ant antfile="pack-and-sign/build.xml">
+                  <property name="localRepository" value="${settings.localRepository}"/>
+                  <property name="projectDir" value="${project.build.directory}"/>
+                  <property name="signDir" value="${sign-dir}"/>
+                  <property name="archiveDir" value="${dist.archive}"/>
+                  <property name="siteDir" value="${dist.site}"/>
+
+                  <property name="mirrorsUrl" value="${mirrors-url}"/>				  
+
+                  <property name="dist" value="mylyn"/>
+                  <property name="filter" value="mylyn"/>
+                  <property name="repositoryName" value="${dist.repository}"/>
+                  <property name="pack200" value="${dist.pack200}"/>
+                  
+                  <property name="skipSign" value="${sign.skip}"/>
+                  <property name="skipPack" value="${pack.skip}"/>
+                  <property name="skipPromote" value="${promote.skip}"/>
+                  
+                  <property name="version" value="${unqualifiedVersion}"/>
+                  <property name="qualifier" value="${buildQualifier}"/>
+                </ant>
+                <echo file="${project.build.directory}/version.properties">
+                  <![CDATA[
+                           ${unqualifiedVersion}
+                           ${buildQualifier}
+                  ]]>
+                </echo>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+ <parent>
+    <groupId>org.eclipse.mylyn</groupId>
+    <artifactId>org.eclipse.mylyn-parent</artifactId>
+    <version>3.8.3-SNAPSHOT</version>
+    <relativePath>../org.eclipse.mylyn/org.eclipse.mylyn-parent</relativePath>
+  </parent>
+  <artifactId>org.eclipse.mylyn-aggregator</artifactId>
+  <version>3.8.3-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <profiles>
+    <profile>
+      <id>standalone</id>
+      <modules>
+        <module>org.eclipse.mylyn.tests.standalone</module>
+      </modules>
+    </profile>
+  </profiles>
+  <modules>
+    <module>org.eclipse.mylyn.discovery-directory</module>
+    <module>org.eclipse.mylyn.tests</module>
+    <module>org.eclipse.mylyn-site</module>
+    <module>org.eclipse.mylyn-target</module>
+  </modules>
+</project>

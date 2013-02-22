@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2011 Tasktop Technologies.
+ All rights reserved. This program and the accompanying materials
+ are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+
+ Contributors:
+     Tasktop Technologies - initial API and implementation
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.eclipse.mylyn.sandbox.search.ui.searchProvider" name="searchProvider" schema="schema//searchProvider.exsd"/>
+   
+   <extension
+         point="org.eclipse.search.searchPages">
+      <page
+            class="org.eclipse.mylyn.internal.sandbox.search.ui.DesktopSearchPage"
+            id="org.eclipse.mylyn.internal.sandbox.search.ui.desktopSearchPage"
+            icon="$nl$/icons/full/elcl16/tsearch_obj.gif"
+            label="%page.label">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.search.ui.category.search"
+            description="%command.description"
+            id="org.eclipse.mylyn.internal.sandbox.search.ui.openDesktopSearchCommand"
+            name="%command.name">
+      </command>
+      <command
+            categoryId="org.eclipse.search.ui.category.search"
+            description="Perform a search"
+            id="org.eclipse.mylyn.sandbox.search.ui.performSearchCommand"
+            name="Perform search">
+            <commandParameter
+                  id="org.eclipse.mylyn.sandbox.search.ui.searchText" name="Search Text" optional="false"/>
+            <commandParameter
+                  id="org.eclipse.mylyn.sandbox.search.ui.filenameFilter" name="Filename Filter" optional="true"/>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.eclipse.mylyn.internal.sandbox.search.ui.openDesktopSearchCommand"
+            class="org.eclipse.mylyn.internal.sandbox.search.ui.OpenDesktopSearchHandler">
+      </handler>
+      <handler
+            commandId="org.eclipse.mylyn.sandbox.search.ui.performSearchCommand"
+            class="org.eclipse.mylyn.internal.sandbox.search.ui.PerfomSearchHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+         
+   		<!-- bug 213385 -->
+      <actionSet
+            id="org.eclipse.mylyn.internal.sandbox.search.ui.actionSet2"
+            label="%actionSet.label"
+            visible="true">
+            <action
+                  class="org.eclipse.mylyn.internal.sandbox.search.ui.OpenDesktopSearchActionDelegate"
+                  definitionId="org.eclipse.mylyn.internal.sandbox.search.ui.openDesktopSearchCommand"
+                  icon="$nl$/icons/full/elcl16/tsearch_obj.gif"
+                  id="org.eclipse.mylyn.internal.sandbox.search.ui.action2"
+                  label="%action.label"
+                  menubarPath="org.eclipse.search.menu/dialogGroup"
+                  style="push">
+            </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.search.searchResultViewPages">
+      <viewPage
+            class="org.eclipse.mylyn.internal.sandbox.search.ui.DesktopSearchResultPage"
+            icon="icons/full/elcl16/tsearch_obj.gif"
+            id="org.eclipse.mylyn.internal.sandbox.search.ui.DesktopSearchResultViewPage"
+            label="Desktop Search"
+            searchResultClass="org.eclipse.mylyn.internal.sandbox.search.ui.DesktopSearchResult">
+      </viewPage>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.mylyn.sandbox.search.ui.SearchResult"
+            class="org.eclipse.mylyn.internal.sandbox.search.ui.DesktopSearchAdapterFactory">
+         <adapter
+               type="org.eclipse.ui.model.IWorkbenchAdapter">
+         </adapter>
+      </factory>
+   </extension>
+
+</plugin>
